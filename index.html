@@ -1,0 +1,108 @@
+<!-- 
+   add this className to .battery__liquid
+   %20 > : gradient-color-red 
+   %40 > : gradient-color-orange
+   %80 > : gradient-color-yellow
+   %100> : gradient-color-green
+
+
+    Battery charging status 
+    Set innerHTML to this element: battery__status
+    ⚡if charging: Charging... <i class="ri-flashlight-line animated-green"></i>
+    🔋if Battery is full: Full battery <i class="ri-battery-2-fill green-color"></i>
+    🪫if Battery is low: Low battery <i class="ri-plug-line animated-red"></i>
+  -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/styles.css" />
+
+    <title>Sabzlearn.ir - Battery</title>
+  </head>
+  <body>
+    <section class="battery">
+      <div class="battery__card">
+        <div class="battery__data">
+          <p class="battery__text">Battery</p>
+          <h1 class="battery__percentage">20%</h1>
+
+          <p class="battery__status">
+            Low battery <i class="ri-plug-line"></i>
+          </p>
+        </div>
+
+        <div class="battery__pill">
+          <div class="battery__level">
+            <div class="battery__liquid"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!--=============== MAIN JS ===============-->
+    <script>
+          function setBattery() {
+      const battery__percentage = document.querySelector('.battery__percentage')
+      const battery__status = document.querySelector('.battery__status')
+      const battery__liquid = document.querySelector('.battery__liquid')
+      navigator.getBattery().then((battery) => {
+      
+
+      const updateBatteryInfo = () => {
+
+      if(battery.charging) {
+        battery__status.innerHTML = 'Charging... <i class="ri-flashlight-line animated-green"></i>'
+      }
+
+        const batlvl = battery.level * 100
+
+      if(batlvl <= 20) {
+        battery__percentage.innerHTML = `${batlvl} %`
+        battery__liquid.style.height = `${batlvl} %`
+        battery__liquid.classList.remove('gradient-color-orange'
+          , 'gradient-color-yellow' 
+          , 'gradient-color-green')
+        battery__liquid.classList.add('gradient-color-red')
+      }else if(batlvl <= 40){
+        battery__percentage.innerHTML = `${batlvl} %`
+        battery__liquid.style.height = `${batlvl} %`
+        battery__liquid.classList.remove('gradient-color-red'
+          , 'gradient-color-yellow' 
+          , 'gradient-color-green')
+        battery__liquid.classList.add('gradient-color-orange')
+      }else if(batlvl <= 60) {
+        battery__percentage.innerHTML = `${batlvl} %`
+        battery__liquid.style.height = `${batlvl} %`
+        battery__liquid.classList.remove('gradient-color-orange'
+          , 'gradient-color-red' 
+          , 'gradient-color-green')
+        battery__liquid.classList.add('gradient-color-yellow')
+      }else if(batlvl <= 100) {
+        battery__percentage.innerHTML = `${batlvl} %`
+        battery__liquid.style.height = `${batlvl}%`
+        battery__liquid.classList.remove('gradient-color-yellow'
+          , 'gradient-color-red' 
+          , 'gradient-color-orange')
+        battery__liquid.classList.add('gradient-color-green')
+      }
+      }
+      
+      updateBatteryInfo();
+      
+      battery.addEventListener('chargingchange' , updateBatteryInfo)
+      battery.addEventListener('levelchange' , updateBatteryInfo)
+      })
+    }
+
+
+    window.addEventListener('load' , setBattery)
+    </script>
+  </body>
+</html>
